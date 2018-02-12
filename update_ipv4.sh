@@ -16,7 +16,7 @@ else
 fi
 
 for RECORD in ${RECORD_LIST//;/ } ; do
-  if [ "${RECORD} = "@" ] ;
+  if [ "${RECORD} = "@" ] ; then
     SUBDOMAIN="${DOMAIN}"
    else
     SUBDOMAIN="${RECORD}.${DOMAIN}"
