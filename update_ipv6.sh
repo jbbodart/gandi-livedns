@@ -2,6 +2,9 @@
 #
 # Updates a zone record using Gandi's LiveDNS.
 
+# prevent shell to expand wildcard record
+set -f
+
 API="https://dns.api.gandi.net/api/v5/"
 IP_SERVICE="http://me.gandi.net"
 
@@ -16,7 +19,7 @@ else
 fi
 
 for RECORD in ${RECORD_LIST//;/ } ; do
-  if [ "${RECORD}" = "@" ] ; then
+  if if [ "${RECORD}" = "@" ] || [ "${RECORD}" = "*" ]; then
     SUBDOMAIN="${DOMAIN}"
   else
     SUBDOMAIN="${RECORD}.${DOMAIN}"
@@ -24,7 +27,7 @@ for RECORD in ${RECORD_LIST//;/ } ; do
 
   CURRENT_IPV6=$(dig AAAA ${SUBDOMAIN} +short)
   if [ "${CURRENT_IPV6}" = "${WAN_IPV6}" ] ; then
-    echo "$(date "+[%Y-%m-%d %H:%M:%S]") [INFO] Current DNS AAAA record for ${SUBDOMAIN} matches WAN IP (${CURRENT_IPV6}). Nothing to do."
+    echo "$(date "+[%Y-%m-%d %H:%M:%S]") [INFO] Current DNS AAAA record for ${RECORD} matches WAN IP (${CURRENT_IPV6}). Nothing to do."
     continue
   fi
 
@@ -34,7 +37,7 @@ for RECORD in ${RECORD_LIST//;/ } ; do
     -H"Content-Type: application/json" \
     "${API}/domains/${DOMAIN}/records/${RECORD}/AAAA")
   if [ "${status}" = '201' ] ; then
-    echo "$(date "+[%Y-%m-%d %H:%M:%S]") [OK] Updated ${SUBDOMAIN} to ${WAN_IPV6}"
+    echo "$(date "+[%Y-%m-%d %H:%M:%S]") [OK] Updated ${RECORD} to ${WAN_IPV6}"
   else
     echo "$(date "+[%Y-%m-%d %H:%M:%S]") [ERROR] API POST returned status ${status}"
   fi
