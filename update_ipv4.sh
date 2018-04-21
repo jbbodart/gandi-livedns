@@ -21,10 +21,10 @@ fi
 for RECORD in ${RECORD_LIST//;/ } ; do
   if [ "${RECORD}" = "@" ] || [ "${RECORD}" = "*" ]; then
     SUBDOMAIN="${DOMAIN}"
-   else
+  else
     SUBDOMAIN="${RECORD}.${DOMAIN}"
   fi
-  
+
   CURRENT_IPV4=$(dig A ${SUBDOMAIN} +short)
   if [ "${CURRENT_IPV4}" = "${WAN_IPV4}" ] ; then
     echo "$(date "+[%Y-%m-%d %H:%M:%S]") [INFO] Current DNS A record for ${RECORD} matches WAN IP (${CURRENT_IPV4}). Nothing to do."
