@@ -6,8 +6,8 @@ ENV SET_IPV4="yes"
 ENV SET_IPV6="no"
 ENV TTL=300
 
-RUN apk -U upgrade
- && apk add curl openssl bind-tools
+RUN apk -U upgrade \
+ && apk add curl openssl bind-tools \
  && rm -rf /var/cache/apk/*
 
 COPY run.sh update_ipv4.sh update_ipv6.sh /usr/local/bin/
