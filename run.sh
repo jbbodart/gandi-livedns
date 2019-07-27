@@ -12,5 +12,5 @@ while true; do
   if [ "${SET_IPV6}" = 'yes' ] ; then
     update_ipv6.sh
   fi
-  sleep ${REFRESH_INTERVAL}
+  sleep ${REFRESH_INTERVAL} & wait
 done
