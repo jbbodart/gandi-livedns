@@ -2,6 +2,7 @@
 
 The purpose of this container is to update DNS zone records using Gandi's LiveDNS (http://doc.livedns.gandi.net/) with your WAN IP.
 
+# Configuration
 Mandatory variables:
 * APIKEY: your Gandi API key
 * DOMAIN: your Gandi domain
@@ -14,3 +15,35 @@ Optional variables :
 * SET_IPV6: Update AAAA record (default: no)
 * FORCE_IPV4: Force the IPv4 address to be used in DNS A records
 * FORCE_IPV6: Force the IPv6 address to be used in DNS AAAA records
+
+## Examples
+The easiest way to run gandi-livedns is simply to *docker run* it from a computer in your network, like so:
+```sh
+docker run -d \
+	-e "APIKEY=<YOUR_VERY_SECRET_API_KEY>" \
+	-e "RECORD_LIST=blog;www;@" \
+	-e "DOMAIN=your-gandi-hosted-domain.com" \
+	jbbodart/gandi-livedns
+```
+This will leave it running in the background, with all the default settings.
+
+An equivalent setup using docker-compose could look like this:  
+**docker-compose.yml**
+```yml
+version: '3.7'
+...
+    services:
+    ...
+        dyndns:
+            image: jbbodart/gandi-livedns
+            restart: unless-stopped
+            env_file:
+                - "dyndns.env"
+```
+
+**dyndns.env**
+```properties
+APIKEY=<YOUR_VERY_SECRET_API_KEY>
+RECORD_LIST=blog;www;@
+DOMAIN=your-gandi-hosted-domain.com
+```

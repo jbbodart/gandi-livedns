@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10.1
 LABEL maintainer="jbbodart@yahoo.com"
 
 ENV REFRESH_INTERVAL=600
