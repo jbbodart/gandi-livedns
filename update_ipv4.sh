@@ -5,7 +5,7 @@
 # prevent shell to expand wildcard record
 set -f
 
-API="https://api.gandi.net/v5/livedns"
+API="https://api.gandi.net/v5/livedns/"
 IP_SERVICE="http://me.gandi.net"
 
 if [[ -z "${FORCE_IPV4}" ]]; then
