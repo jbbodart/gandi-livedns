@@ -5,8 +5,12 @@
 # prevent shell to expand wildcard record
 set -f
 
-API="https://dns.api.gandi.net/api/v5/"
+API="https://api.gandi.net/v5/livedns/"
 IP_SERVICE="http://me.gandi.net"
+
+if [[ -z "${GANDI_PAT}" && ! -z ${APIKEY} ]]; then
+  GANDI_PAT=${APIKEY}
+fi
 
 if [[ -z "${FORCE_IPV4}" ]]; then
   WAN_IPV4=$(curl -s4 ${IP_SERVICE})
@@ -33,7 +37,7 @@ for RECORD in ${RECORD_LIST//;/ } ; do
 
   DATA='{"rrset_ttl": '${TTL}', "rrset_values": ["'${WAN_IPV4}'"]}'
   status=$(curl -s -w %{http_code} -o /dev/null -XPUT -d "${DATA}" \
-    -H"X-Api-Key: ${APIKEY}" \
+    -H"Authorization: Bearer ${GANDI_PAT}" \
     -H"Content-Type: application/json" \
     "${API}/domains/${DOMAIN}/records/${RECORD}/A")
   if [ "${status}" = '201' ] ; then
