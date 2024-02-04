@@ -8,6 +8,10 @@ set -f
 API="https://api.gandi.net/v5/livedns/"
 IP_SERVICE="http://me.gandi.net"
 
+if [[ -z "${GANDI_PAT}" && ! -z ${APIKEY} ]]; then
+  GANDI_PAT=${APIKEY}
+fi
+
 if [[ -z "${FORCE_IPV6}" ]]; then
   WAN_IPV6=$(curl -s6 ${IP_SERVICE})
   if [[ -z "${WAN_IPV6}" ]]; then
@@ -33,7 +37,7 @@ for RECORD in ${RECORD_LIST//;/ } ; do
 
   DATA='{"rrset_ttl": '${TTL}', "rrset_values": ["'${WAN_IPV6}'"]}'
   status=$(curl -s -w %{http_code} -o /dev/null -XPUT -d "${DATA}" \
-    -H"Authorization: Bearer ${APIKEY}" \
+    -H"Authorization: Bearer ${GANDI_PAT}" \
     -H"Content-Type: application/json" \
     "${API}/domains/${DOMAIN}/records/${RECORD}/AAAA")
   if [ "${status}" = '201' ] ; then
