@@ -6,7 +6,7 @@ This image is extremely lightweight  (Alpine Linux based) and has very few depen
 
 ## Configuration
 Mandatory variables:
-* APIKEY: your Gandi API key
+* APIKEY: your Gandi Personal Acces Token
 * DOMAIN: your Gandi domain
 * RECORD_LIST: DNS records to update separated by ";"
 
@@ -22,7 +22,7 @@ Optional variables :
 The easiest way to run gandi-livedns is simply to *docker run* it from a computer in your network, leaving it running in the background with all the default settings.
 ```sh
 docker run -d \
-	-e "APIKEY=<YOUR_VERY_SECRET_API_KEY>" \
+	-e "APIKEY=<YOUR_VERY_SECRET_PERSONAL_ACCESS_TOKEN>" \
 	-e "RECORD_LIST=blog;www;@" \
 	-e "DOMAIN=your-gandi-hosted-domain.com" \
 	jbbodart/gandi-livedns
@@ -45,7 +45,7 @@ version: '3.7'
 
 **dyndns.env**
 ```properties
-APIKEY=<YOUR_VERY_SECRET_API_KEY>
+APIKEY=<YOUR_VERY_SECRET_PERSONAL_ACCESS_TOKEN>
 RECORD_LIST=blog;www;@
 DOMAIN=your-gandi-hosted-domain.com
 ```
